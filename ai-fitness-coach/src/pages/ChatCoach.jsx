@@ -26,30 +26,17 @@ const ChatCoach = () => {
     setIsTyping(true);
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-      const token = localStorage.getItem("token");
-
-      const res = await fetch(`${apiUrl}/api/ai/chat`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/ai/chat`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to get AI response");
-      }
-
-      const aiMsg = { role: "assistant", text: data.reply || data.message || "No response received." };
+      const aiMsg = { role: "assistant", text: data.reply || data.message || "I'm having trouble connecting to the network." };
       setMessages((prev) => [...prev, aiMsg]);
     } catch (err) {
-      console.error("AI Coach Error:", err);
-      const errorMsg = { role: "assistant", text: "I'm having trouble connecting to my central processing. Please check if your account is active or try again shortly." };
-      setMessages((prev) => [...prev, errorMsg]);
+      console.error(err);
     } finally {
       setIsTyping(false);
     }

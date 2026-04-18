@@ -1,48 +1,34 @@
 import Navbar from "../components/Navbar";
 import WorkoutCard from "../components/WorkoutCard";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaPlus, FaRunning } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const Dashboard = () => {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          navigate("/login");
-          return;
-        }
-
-        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-        const res = await fetch(`${apiUrl}/api/workouts`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/workouts`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        if (res.status === 401) {
-          localStorage.removeItem("token");
-          navigate("/login");
-          return;
-        }
-
         const data = await res.json();
         setWorkouts(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error("Dashboard error:", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchWorkouts();
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0a0a0c] pt-24 pb-12 px-6">
