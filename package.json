@@ -1,6 +1,9 @@
 {
   "name": "ai-fitness-coach",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "build:css": "tailwindcss -i ./ai-fitness-coach/src/input.css -o ./dist/output.css ",
     "postinstall": "echo \"postinstall complete\""
