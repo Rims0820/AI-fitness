@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -10,70 +12,85 @@ const Signup = () => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await res.json();
 
       if (data._id) {
-        alert("Signup successful");
         window.location.href = "/login";
       } else {
-        alert(data.message || "Signup failed");
+        alert(data.message || "Registration Failed");
       }
     } catch (error) {
       console.log(error);
-      alert("Server error");
+      alert("System Error");
     }
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-[#0a0a0c] flex flex-col">
       <Navbar />
-      <div className="flex justify-center mt-20">
-        <div className="bg-white shadow-lg p-8 rounded-xl w-80">
-          <h2 className="text-2xl mb-4">Sign Up</h2>
 
-          <input
-            type="text"
-            placeholder="Name"
-            className="border p-2 w-full mb-3"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+      <div className="flex-1 flex items-center justify-center p-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full max-w-md bg-white/5 border border-white/10 p-10 rounded-[40px] shadow-2xl backdrop-blur-xl"
+        >
+          <header className="text-center mb-10">
+            <h2 className="text-4xl font-black text-white italic tracking-tighter uppercase">
+              Join the <span className="text-cyan-400">Elite</span>
+            </h2>
+            <p className="text-gray-500 mt-2 font-medium">Start your AI journey today</p>
+          </header>
 
-          <input
-            type="email"
-            placeholder="Email"
-            className="border p-2 w-full mb-3"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <div className="space-y-4">
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 ml-4">Full Name</label>
+              <input
+                type="text"
+                className="w-full px-6 py-4 rounded-2xl"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="border p-2 w-full mb-3"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 ml-4">Email Address</label>
+              <input
+                type="email"
+                className="w-full px-6 py-4 rounded-2xl"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-          <button
-            onClick={handleSignup}
-            className="bg-blue-600 text-white w-full py-2 rounded-lg"
-          >
-            Register
-          </button>
-        </div>
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 ml-4">Secure Password</label>
+              <input
+                type="password"
+                className="w-full px-6 py-4 rounded-2xl"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <button
+              onClick={handleSignup}
+              className="w-full py-5 bg-cyan-400 text-black font-black uppercase tracking-widest rounded-2xl mt-4 hover:bg-white transition-all transform active:scale-95"
+            >
+              Create Account
+            </button>
+
+            <p className="text-center text-gray-500 text-sm mt-8">
+              Already a member? <Link to="/login" className="text-cyan-400 font-bold hover:underline">Login</Link>
+            </p>
+          </div>
+        </motion.div>
       </div>
-    </>
+    </div>
   );
 };
 
