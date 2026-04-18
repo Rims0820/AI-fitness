@@ -7,6 +7,7 @@ const dietRoutes = require("./routes/dietRoutes");
 const progressRoutes = require("./routes/progressRoutes");
 
 dotenv.config();
+console.log("!!! DEPLOYMENT VERSION 4 ACTIVE !!!");
 console.log("System Check: Loading backend server...");
 connectDB();
 
